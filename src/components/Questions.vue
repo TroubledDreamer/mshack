@@ -20,6 +20,7 @@ let currentQuestionIndex = ref(0); // Track the current question index
 let isCorrect = ref('');
 let currentSection = ref('teaching'); // Track the current section (teaching or questions)
 
+
 // Questions data
 let questions = {
   "teaching": "As a zookeeper, it's important to be able to communicate with visitors and colleagues in Spanish to ensure the safety and well-being of the animals under your care. One key phrase you can learn is '¿Dónde está el elefante?' which means 'Where is the elephant?' This phrase can help you locate animals and provide information to visitors.",

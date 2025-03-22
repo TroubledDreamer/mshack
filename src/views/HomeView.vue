@@ -18,7 +18,8 @@ function Support() {
 </script>
 
 <template>
-  <div>
+
+  <div class="homeContainer">
 
     <button class="homeButtons" @click="StartLearning()">Start Learning</button>
 
@@ -28,6 +29,8 @@ function Support() {
     <button class="homeButtons" @click="Support()">Support</button>
 
   </div>
+
+
 </template>
 
 

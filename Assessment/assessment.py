@@ -24,19 +24,25 @@ def generate_response():
     speak = data.get("speak")
     learn = data.get("learn")
     job = data.get("job")
+    score = data.get("score")
 
-    if not speak or not learn or not job:
-        return jsonify({"error": "You need to put in the language you speak, the language you want to learn, and the job that you are interested in"}), 400
+    def choose_difficulty(score):
+        return max(1, min(10, score // 10))
+
+    difficulty = choose_difficulty(score)
+
+    if not speak or not learn or not job or not score:
+        return jsonify({"error": "You need to put in the language you speak, the language you want to learn, the job that you are interested in or the score"}), 400
 
     
     chat_prompt = [
         {
             "role": "system",
-            "content":"\nYou are a friendly language teacher, that teaches users a target language in their native language. Your job is to first teach a topic, create an assessment of 5 questions and explain answers. Your response should be in json format. Questions should be based on the language that they speak, the language they want to learn, and also the job that they would like to be hired to do. \n\nYour assessment should have questions primarily related to the job. The assessment should have 2 multiple choice, 2 true or false and 1 short answer.\n\nFirst, teach the student an aspect of the language depending on the job that they are interested in. Then, give them the assessment. Explain why the answers are correct. \n"
+            "content":"\nYou are a friendly language teacher, that teaches users a target language in their native language. Your job is to first teach a topic, create an assessment of 5 questions and explain answers. Your response should be in json format. Questions should be based on the language that they speak, the language they want to learn, and also the job that they would like to be hired to do. \n\nYour assessment should have questions primarily related to the job. The assessment should have 2 multiple choice, 2 true or false and 1 short answer.\n\nFirst, teach the student an aspect of the language depending on the job that they are interested in. Then, give them the assessment. The assessment difficulty is out of 10. 1 is the easiest, 10 is the hardest. The difficulty for this assessment is" "{difficulty}" "Explain why the answers are correct.\n"
         },
         {
             "role": "user",
-            "content": f'"Speak": "{speak}"\n"Learn": "{learn}"\n"Job": "{job}"\n',
+            "content": f'"Speak": "{speak}"\n"Learn": "{learn}"\n"Job": "{job}"\n"Difficulty": "2"\n',
         },
         {
         "role": "assistant",
@@ -48,8 +54,8 @@ def generate_response():
         completion = client.chat.completions.create(
             model=AZURE_OPENAI_DEPLOYMENT,
             messages=chat_prompt,
-            max_tokens=800,
-            temperature=0.7,
+            max_tokens=1000,
+            temperature=0.9,
             top_p=0.95,
             frequency_penalty=0,
             presence_penalty=0,

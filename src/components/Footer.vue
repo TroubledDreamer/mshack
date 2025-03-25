@@ -5,7 +5,8 @@
 <style scoped>
 
 #footerBackground {
-    background-color: #4b4545;
+    background-color: #272b27;
+
 
     height: 200px;
     float: bottom;

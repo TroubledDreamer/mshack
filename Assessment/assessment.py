@@ -2,8 +2,11 @@ import os
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from openai import AzureOpenAI
+from flask_cors import CORS
 
 app = Flask(__name__)
+
+CORS(app)  # Enables CORS for all routes
 
 load_dotenv()
 
@@ -31,7 +34,7 @@ def generate_response():
 
     difficulty = choose_difficulty(score)
 
-    if not speak or not learn or not job or not score:
+    if not speak or not learn or not job:
         return jsonify({"error": "You need to put in the language you speak, the language you want to learn, the job that you are interested in or the score"}), 400
 
     
@@ -63,10 +66,10 @@ def generate_response():
             stream=False,
         )
 
-        return jsonify(completion.to_dict())
+        return jsonify(completion.to_dict()['choices'][0]['message']['content']), 200
     
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=8000, debug=True)

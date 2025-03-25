@@ -8,9 +8,7 @@ import question from '../components/Questions.vue'
 
 
 <template>
-    <div>
-        Learning
-    </div>
+
 
     <question />
 

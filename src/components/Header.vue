@@ -24,7 +24,7 @@ function goBack() {
 <style scoped>
 
 #headerBackground {
-    background-color: #4b4545;
+    background-color: #272b27;
     border: none;
     display: flex;
     

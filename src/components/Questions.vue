@@ -21,7 +21,7 @@ const score = ref(0);
 
 // Questions data
 const questions = ref({
-  teaching: "As a zookeeper, it's important to be able to communicate with visitors and colleagues in Spanish to ensure the safety and well-being of the animals under your care. One key phrase you can learn is '¿Dónde está el elefante?' which means 'Where is the elephant?' This phrase can help you locate animals and provide information to visitors.",
+  teaching: "loading...",
   assessment: {
     questions: [
       {
@@ -33,22 +33,22 @@ const questions = ref({
           "Who is that?"
         ],
         answer: "Where is the elephant?",
-        type: "multipleChoiceOptions"
+        type: "multiple choice"
       },
       {
-        question: "Tigre is the Spanish word for 'lion'.",
+        question: "Tigre is the Spanish word for 'lion'.", 
         answer: false,
-        type: "trueOrFalse"
+        type: "true or false"
       },
       {
         question: "Monkeys are commonly found in zoos around the world.",
         answer: true,
-        type: "trueOrFalse"
+        type: "true or false"
       },
       {
         question: "What is the Spanish word for 'giraffe'?",
         answer: "jirafa",
-        type: "shortAnswer"
+        type: "short answer"
       },
       {
         question: "Which animal is 'el oso' in Spanish?",
@@ -134,8 +134,8 @@ function startRecognition() {
     recognition.value.maxAlternatives = 1;
 
     recognition.value.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        transcript.value = transcript;
+        const transcripta = event.results[0][0].transcript;
+        transcript.value = transcripta;
     };
 
     recognition.value.onerror = (event) => {
@@ -195,16 +195,17 @@ function checkAnswer() {
     const currentQuestion = questions.value.assessment.questions[currentQuestionIndex.value];
     let correct = false;
 
-    if (currentQuestion.type === 'multipleChoiceOptions') {
+    if (currentQuestion.type === 'multiple choice') {
         const selectedText = [option1.value, option2.value, option3.value, option4.value][parseInt(selectedOption.value.replace('option', '')) - 1];
         correct = selectedText === currentQuestion.answer;
-    } else if (currentQuestion.type === 'trueOrFalse') {
+        console.log(selectedText, currentQuestion.answer);
+    } else if (currentQuestion.type === 'true or false') {
         correct = (selectedOption.value === 'truer' && currentQuestion.answer === true) ||
                   (selectedOption.value === 'falser' && currentQuestion.answer === false);
-    } else if (currentQuestion.type === 'shortAnswer') {
-        correct = userInput.value.toLowerCase() === currentQuestion.answer.toLowerCase();
+    } else if (currentQuestion.type === 'short answer') {
+        correct = transcript.value.toLowerCase() === currentQuestion.answer.toLowerCase();
     } else if (currentQuestion.type === 'speach') {
-        correct = transcript.value.toLowerCase().includes(currentQuestion.answer.toLowerCase());
+        correct = transcript.value.toLowerCase() === currentQuestion.answer.toLowerCase();
     }
 
     if (correct) {
